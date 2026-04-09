@@ -52,3 +52,29 @@ input,
 textarea {
   font-family: inherit;
 }
+
+.hero {
+  margin: 24px auto 18px;
+  width: min(1180px, calc(100% - 24px));
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.75), rgba(255,255,255,0.5));
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: -80px;
+  top: -80px;
+  background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+  pointer-events: none;
+}
