@@ -8,3 +8,5 @@ The application offers a wide range of features tailored to support everyday wel
 Bloom & Balance also extends its support to mothers and families by including tools such as grocery list organization, meal inspiration, and a simple routine planner for managing both personal and family responsibilities.
 
 At its core, the goal of Bloom & Balance is to empower users to grow through small, intentional daily actions - helping them create a more balanced, mindful, and fulfilling lifestyle.
+
+Access Bloom & Balance here:  https://aleshasulahry-hub.github.io/bloom-and-balance/
