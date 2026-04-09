@@ -38,7 +38,7 @@
       <button class="small-btn" onclick="newReminder()">New Reminder</button>
     </div>
   </header>
-  
+
  <nav class="top-nav">
     <button onclick="showSection('dashboard')">Dashboard</button>
     <button onclick="showSection('goals')">Goals & Habits</button>
@@ -50,3 +50,12 @@
     <button onclick="showSection('progress')">Progress</button>
     <button onclick="showSection('account')">Account</button>
   </nav>
+
+  </main>
+  <section id="dashboard" class="page active">
+      <div class="grid three">
+        <div class="card">
+          <h2>🦋 Quote Generator</h2>
+          <p id="quoteText" class="soft-text">You are growing beautifully, even on slow days.</p>
+          <button onclick="newQuote()">New Quote</button>
+        </div>
