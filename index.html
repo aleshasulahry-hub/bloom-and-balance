@@ -61,6 +61,19 @@
         </div>
 
         <div class="card">
+          <h2>💧 Water Tracker</h2>
+          <p class="big-number"><span id="waterCount">0</span>/8 cups</p>
+          <div class="button-row">
+            <button onclick="addWater()">+ Add Water</button>
+            <button onclick="resetWater()">Reset</button>
+          </div>
+          <div class="progress-shell">
+            <div id="waterBar" class="progress-fill"></div>
+          </div>
+        </div>
+
+
+        <div class="card">
           <h2>💕 Positive Reminder</h2>
           <p id="reminderText">Take care of yourself with kindness today.</p>
           <button onclick="newReminder()">New Reminder</button>
