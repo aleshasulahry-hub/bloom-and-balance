@@ -130,3 +130,33 @@
         </div>
       </div>
     </section>
+
+    <section id="journal" class="page">
+      <div class="grid two">
+        <div class="card">
+          <h2>✨ Reflection Journal</h2>
+          <input type="text" id="journalTitle" placeholder="Journal title" />
+          <textarea id="journalEntry" rows="8" placeholder="Write your thoughts here..."></textarea>
+          <button onclick="saveJournal()">Save Journal</button>
+        </div>
+
+        <div class="card">
+          <h2>😊 Daily Mood Log</h2>
+          <label for="moodSelect">How are you feeling today?</label>
+          <select id="moodSelect">
+            <option value="1">1 - Very Low</option>
+            <option value="2">2 - Low</option>
+            <option value="3">3 - Okay</option>
+            <option value="4">4 - Good</option>
+            <option value="5">5 - Great</option>
+          </select>
+          <button onclick="saveMood()">Save Mood</button>
+          <p id="savedMoodText"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Journal Section</h2>
+        <div id="journalList" class="journal-list"></div>
+      </div>
+    </section>
