@@ -107,6 +107,14 @@ textarea {
   box-shadow: var(--shadow);
 }
 
+.hero-actions,
+.button-row,
+.input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .primary-btn,
 .secondary-btn,
 .small-btn,
