@@ -45,3 +45,10 @@ h1, h2, h3 {
   color: var(--heading);
   margin-top: 0;
 }
+
+button,
+select,
+input,
+textarea {
+  font-family: inherit;
+}
