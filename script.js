@@ -7,3 +7,13 @@ const quotes = [
   "Softness and consistency can exist together.",
   "Progress matters more than perfection."
 ];
+const reminders = [
+  "Take care of yourself with kindness today.",
+  "Drink water before your next task.",
+  "Take a deep breath and unclench your shoulders.",
+  "You do not need to earn rest.",
+  "Feed yourself kindly today.",
+  "Pause and ask what your body needs right now."
+];
+
+let breathingInterval = null;
