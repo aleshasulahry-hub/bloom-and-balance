@@ -160,3 +160,63 @@
         <div id="journalList" class="journal-list"></div>
       </div>
     </section>
+
+    <section id="cycle" class="page">
+      <div class="grid two">
+        <div class="card">
+          <h2>📅 Period Tracker</h2>
+          <label for="cycleStartDate">Last period start date</label>
+          <input type="date" id="cycleStartDate" />
+
+          <label for="cycleLength">Cycle length</label>
+          <input type="number" id="cycleLength" min="21" max="40" value="28" />
+
+          <button onclick="saveCycleData()">Save Cycle Info</button>
+          <p><strong>Today is cycle day:</strong> <span id="cycleDayDisplay">Not set</span></p>
+          <p><strong>Current phase:</strong> <span id="phaseName">Not set</span></p>
+          <p id="phaseDescription"></p>
+        </div>
+
+        <div class="card">
+          <h2>🌙 Cycle Phases</h2>
+          <div class="phase-box">
+            <h3>Menstrual</h3>
+            <p>Lower energy. Focus on rest, iron-rich foods, hydration, and gentle movement.</p>
+          </div>
+          <div class="phase-box">
+            <h3>Follicular</h3>
+            <p>Energy rises. Great for fresh habits, productivity, lighter meals, and workouts.</p>
+          </div>
+          <div class="phase-box">
+            <h3>Ovulation</h3>
+            <p>Often the most energetic and social phase. Good for higher intensity movement and protein.</p>
+          </div>
+          <div class="phase-box">
+            <h3>Luteal</h3>
+            <p>Slow down a little. Support cravings with nourishing foods and calming routines.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🌿 Cycle-Based Workout Suggestions</h2>
+        <div class="grid four">
+          <div class="mini-card">
+            <h3>Menstrual</h3>
+            <p>Walks, stretching, mobility, light yoga</p>
+          </div>
+          <div class="mini-card">
+            <h3>Follicular</h3>
+            <p>Pilates, brisk walks, beginner strength</p>
+          </div>
+          <div class="mini-card">
+            <h3>Ovulation</h3>
+            <p>Dance, cardio, strength circuits</p>
+          </div>
+          <div class="mini-card">
+            <h3>Luteal</h3>
+            <p>Walking, moderate workouts, stretching</p>
+          </div>
+        </div>
+      </div>
+    </section>
