@@ -1,0 +1,25 @@
+:root {
+  --bg: #fff7fb;
+  --bg2: #fdf1f8;
+  --card: rgba(255, 255, 255, 0.88);
+  --text: #5d4756;
+  --heading: #a04d7c;
+  --accent: #ecb7cf;
+  --accent-dark: #d884ad;
+  --accent-soft: #f8dce9;
+  --border: #f1ccdc;
+  --shadow: 0 10px 30px rgba(192, 124, 159, 0.12);
+}
+
+body.lavender {
+  --bg: #faf6ff;
+  --bg2: #f3ecff;
+  --card: rgba(255, 255, 255, 0.9);
+  --text: #534b67;
+  --heading: #7f60b3;
+  --accent: #d9caf8;
+  --accent-dark: #ae94df;
+  --accent-soft: #ece3ff;
+  --border: #ddd0f6;
+  --shadow: 0 10px 30px rgba(130, 102, 188, 0.13);
+}
