@@ -136,3 +136,29 @@ button:hover,
   background: var(--accent-dark);
   transform: translateY(-1px);
 }
+
+.top-nav {
+  width: min(1180px, calc(100% - 24px));
+  margin: 0 auto 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 14px;
+  position: sticky;
+  top: 10px;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+}
+
+.theme-bar {
+  width: min(1180px, calc(100% - 24px));
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
