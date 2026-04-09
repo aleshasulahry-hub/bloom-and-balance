@@ -106,3 +106,25 @@ textarea {
   align-self: center;
   box-shadow: var(--shadow);
 }
+
+.primary-btn,
+.secondary-btn,
+.small-btn,
+button {
+  border: none;
+  background: var(--accent);
+  color: var(--text);
+  padding: 11px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-weight: 600;
+}
+
+button:hover,
+.primary-btn:hover,
+.secondary-btn:hover,
+.small-btn:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
