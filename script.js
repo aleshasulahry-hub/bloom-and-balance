@@ -38,3 +38,46 @@ let appData = {
   cycleStartDate: "",
   cycleLength: 28
 };
+
+function saveData() {
+  localStorage.setItem("bloomBalanceData", JSON.stringify(appData));
+}
+
+function loadData() {
+  const saved = localStorage.getItem("bloomBalanceData");
+  if (saved) {
+    appData = JSON.parse(saved);
+  }
+}
+
+function showSection(sectionId) {
+  const pages = document.querySelectorAll(".page");
+  pages.forEach(page => page.classList.remove("active"));
+  document.getElementById(sectionId).classList.add("active");
+}
+
+function newQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  document.getElementById("quoteText").textContent = quotes[randomIndex];
+}
+
+function newReminder() {
+  const randomIndex = Math.floor(Math.random() * reminders.length);
+  const text = reminders[randomIndex];
+  document.getElementById("reminderText").textContent = text;
+  document.getElementById("todayReminder").textContent = text;
+}
+
+function addWater() {
+  if (appData.water < 8) {
+    appData.water++;
+    saveData();
+    renderAll();
+  }
+}
+
+function resetWater() {
+  appData.water = 0;
+  saveData();
+  renderAll();
+}
