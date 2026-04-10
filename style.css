@@ -24,6 +24,19 @@ body.lavender {
   --shadow: 0 10px 30px rgba(130, 102, 188, 0.13);
 }
 
+body.sage {
+  --bg: #f7fcf7;
+  --bg2: #eef8ef;
+  --card: rgba(255, 255, 255, 0.92);
+  --text: #506055;
+  --heading: #6c9172;
+  --accent: #d5e9d6;
+  --accent-dark: #96be9d;
+  --accent-soft: #e7f4e8;
+  --border: #d6e7d7;
+  --shadow: 0 10px 30px rgba(103, 143, 110, 0.12);
+}
+
 * {
   box-sizing: border-box;
 }
