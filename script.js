@@ -81,3 +81,47 @@ function resetWater() {
   saveData();
   renderAll();
 }
+
+function updateWaterUI() {
+  document.getElementById("waterCount").textContent = appData.water;
+  document.getElementById("waterProgressText").textContent = appData.water;
+  const percent = (appData.water / 8) * 100;
+  document.getElementById("waterBar").style.width = percent + "%";
+  document.getElementById("waterProgressBar").style.width = percent + "%";
+}
+
+function startBreathing() {
+  const steps = [
+    "Inhale for 4 seconds",
+    "Hold for 4 seconds",
+    "Exhale for 6 seconds",
+    "Pause for 2 seconds"
+  ];
+
+  const circle1 = document.getElementById("breathingCircle");
+  const circle2 = document.getElementById("breathingCircle2");
+  let index = 0;
+
+  clearInterval(breathingInterval);
+  document.getElementById("breathingText").textContent = steps[index];
+  document.getElementById("breathingText2").textContent = steps[index];
+
+  if (circle1) circle1.classList.add("animate");
+  if (circle2) circle2.classList.add("animate");
+
+  breathingInterval = setInterval(() => {
+    index = (index + 1) % steps.length;
+    document.getElementById("breathingText").textContent = steps[index];
+    document.getElementById("breathingText2").textContent = steps[index];
+  }, 4000);
+}
+
+function stopBreathing() {
+  clearInterval(breathingInterval);
+  const circle1 = document.getElementById("breathingCircle");
+  const circle2 = document.getElementById("breathingCircle2");
+  if (circle1) circle1.classList.remove("animate");
+  if (circle2) circle2.classList.remove("animate");
+  document.getElementById("breathingText").textContent = "Breathing stopped.";
+  document.getElementById("breathingText2").textContent = "Breathing stopped.";
+}
