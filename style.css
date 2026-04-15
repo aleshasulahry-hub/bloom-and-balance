@@ -317,6 +317,43 @@ main {
   transform: scale(1.18);
 }
 
+.floating-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.butterfly,
+.flower {
+  position: absolute;
+  opacity: 0.65;
+  font-size: 26px;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.b1 { left: 6%; top: 80%; animation: floatUp 18s infinite; }
+.b2 { left: 85%; top: 90%; animation: floatUp 15s infinite 2s; }
+.b3 { left: 45%; top: 88%; animation: floatUp 20s infinite 4s; }
+
+.f1 { left: 15%; top: 15%; animation: sway 7s infinite; }
+.f2 { right: 10%; top: 24%; animation: sway 8s infinite; }
+.f3 { left: 8%; bottom: 15%; animation: sway 9s infinite; }
+.f4 { right: 12%; bottom: 10%; animation: sway 8.5s infinite; }
+
+@keyframes floatUp {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-45vh) translateX(18px) rotate(8deg); }
+  100% { transform: translateY(-95vh) translateX(-12px) rotate(-8deg); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: translateX(0px) rotate(0deg); }
+  50% { transform: translateX(12px) rotate(7deg); }
+}
+
 @media (max-width: 1000px) {
   .hero,
   .grid.two,
