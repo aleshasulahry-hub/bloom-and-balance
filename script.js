@@ -430,3 +430,103 @@ function updateCycleInfo() {
   dashboardPhaseTip.textContent = description;
   dashboardCycleDay.textContent = cycleDay;
 }
+
+function updateProgress() {
+  const goalCount = appData.goals.length;
+  const habitCount = appData.habits.length;
+  const journalCount = appData.journals.length;
+  const groceryCount = appData.grocery.length;
+  const routineCount = appData.routine.length;
+  const selfCareCount = appData.selfCare.length;
+
+  const goalDone = appData.goals.filter(item => item.done).length;
+  const habitDone = appData.habits.filter(item => item.done).length;
+  const moodAverage = appData.moods.length
+    ? (appData.moods.reduce((a, b) => a + b, 0) / appData.moods.length).toFixed(1)
+    : 0;
+
+  document.getElementById("goalCount").textContent = goalCount;
+  document.getElementById("habitCount").textContent = habitCount;
+  document.getElementById("journalCount").textContent = journalCount;
+  document.getElementById("groceryCount").textContent = groceryCount;
+  document.getElementById("routineCount").textContent = routineCount;
+  document.getElementById("selfCareCount").textContent = selfCareCount;
+  document.getElementById("moodAverage").textContent = moodAverage;
+
+  const goalPercent = goalCount ? (goalDone / goalCount) * 100 : 0;
+  const habitPercent = habitCount ? (habitDone / habitCount) * 100 : 0;
+  const moodPercent = (Number(moodAverage) / 5) * 100;
+
+  document.getElementById("goalChartBar").style.width = goalPercent + "%";
+  document.getElementById("habitChartBar").style.width = habitPercent + "%";
+  document.getElementById("moodChartBar").style.width = moodPercent + "%";
+
+  updateWaterUI();
+}
+
+function loginUser() {
+  const username = document.getElementById("usernameInput").value.trim();
+
+  if (username !== "") {
+    appData.username = username;
+    saveData();
+    document.getElementById("loginMessage").textContent = "Logged in as " + username;
+  }
+}
+
+function logoutUser() {
+  appData.username = "";
+  saveData();
+  document.getElementById("loginMessage").textContent = "Not logged in";
+  document.getElementById("usernameInput").value = "";
+}
+
+function changeTheme() {
+  const theme = document.getElementById("themeSelect").value;
+  appData.theme = theme;
+  applyTheme();
+  saveData();
+}
+
+function applyTheme() {
+  document.body.classList.remove("lavender", "sage");
+
+  if (appData.theme === "lavender") {
+    document.body.classList.add("lavender");
+  } else if (appData.theme === "sage") {
+    document.body.classList.add("sage");
+  }
+
+  document.getElementById("themeSelect").value = appData.theme;
+}
+
+function renderAll() {
+  applyTheme();
+  renderGoals();
+  renderHabits();
+  renderSelfCare();
+  renderJournal();
+  renderGrocery();
+  renderRoutine();
+  updateWaterUI();
+  updateCycleInfo();
+  updateProgress();
+
+  if (appData.username) {
+    document.getElementById("loginMessage").textContent = "Logged in as " + appData.username;
+    document.getElementById("usernameInput").value = appData.username;
+  }
+
+  if (appData.cycleStartDate) {
+    document.getElementById("cycleStartDate").value = appData.cycleStartDate;
+  }
+
+  document.getElementById("cycleLength").value = appData.cycleLength || 28;
+}
+
+window.onload = function () {
+  loadData();
+  renderAll();
+  newReminder();
+  newQuote();
+};
