@@ -125,3 +125,42 @@ function stopBreathing() {
   document.getElementById("breathingText").textContent = "Breathing stopped.";
   document.getElementById("breathingText2").textContent = "Breathing stopped.";
 }
+
+function addGoal() {
+  const input = document.getElementById("goalInput");
+  const text = input.value.trim();
+
+  if (text !== "") {
+    appData.goals.push({ text: text, done: false });
+    input.value = "";
+    saveData();
+    renderGoals();
+    updateProgress();
+  }
+}
+
+function addHabit() {
+  const input = document.getElementById("habitInput");
+  const text = input.value.trim();
+
+  if (text !== "") {
+    appData.habits.push({ text: text, done: false });
+    input.value = "";
+    saveData();
+    renderHabits();
+    updateProgress();
+  }
+}
+
+function addSelfCare() {
+  const input = document.getElementById("selfCareInput");
+  const text = input.value.trim();
+
+  if (text !== "") {
+    appData.selfCare.push({ text: text, done: false });
+    input.value = "";
+    saveData();
+    renderSelfCare();
+    updateProgress();
+  }
+}
