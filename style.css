@@ -316,3 +316,40 @@ main {
 .breathing-circle.animate {
   transform: scale(1.18);
 }
+
+@media (max-width: 1000px) {
+  .hero,
+  .grid.two,
+  .grid.three,
+  .grid.four {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .theme-bar {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 18px;
+  }
+
+  .top-nav {
+    justify-content: flex-start;
+  }
+
+  .card,
+  .mini-card {
+    padding: 16px;
+  }
+
+  .breathing-circle {
+    width: 130px;
+    height: 130px;
+  }
+}
