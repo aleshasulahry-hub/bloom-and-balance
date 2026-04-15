@@ -193,3 +193,88 @@ function createListItem(item, index, type) {
     saveData();
     renderAll();
   };
+
+  actions.appendChild(doneBtn);
+  actions.appendChild(deleteBtn);
+  li.appendChild(textSpan);
+  li.appendChild(actions);
+
+  return li;
+}
+
+function renderGoals() {
+  const list = document.getElementById("goalList");
+  list.innerHTML = "";
+  appData.goals.forEach((goal, index) => {
+    list.appendChild(createListItem(goal, index, "goals"));
+  });
+}
+
+function renderHabits() {
+  const list = document.getElementById("habitList");
+  list.innerHTML = "";
+  appData.habits.forEach((habit, index) => {
+    list.appendChild(createListItem(habit, index, "habits"));
+  });
+}
+
+function renderSelfCare() {
+  const list = document.getElementById("selfCareList");
+  list.innerHTML = "";
+  appData.selfCare.forEach((item, index) => {
+    list.appendChild(createListItem(item, index, "selfCare"));
+  });
+}
+
+function saveJournal() {
+  const titleInput = document.getElementById("journalTitle");
+  const entryInput = document.getElementById("journalEntry");
+
+  const title = titleInput.value.trim() || "Untitled Reflection";
+  const entry = entryInput.value.trim();
+
+  if (entry !== "") {
+    appData.journals.unshift({
+      title: title,
+      body: entry,
+      date: new Date().toLocaleString()
+    });
+
+    titleInput.value = "";
+    entryInput.value = "";
+    saveData();
+    renderJournal();
+    updateProgress();
+  }
+}
+
+function renderJournal() {
+  const journalList = document.getElementById("journalList");
+  journalList.innerHTML = "";
+
+  if (appData.journals.length === 0) {
+    journalList.innerHTML = "<p>No journal entries yet.</p>";
+    return;
+  }
+
+  appData.journals.forEach((entry, index) => {
+    const item = document.createElement("div");
+    item.className = "journal-item";
+
+    item.innerHTML = `
+      <h3>${entry.title}</h3>
+      <p><strong>${entry.date}</strong></p>
+      <p>${entry.body}</p>
+      <button onclick="deleteJournal(${index})">Delete</button>
+    `;
+
+    journalList.appendChild(item);
+  });
+}
+
+function deleteJournal(index) {
+  appData.journals.splice(index, 1);
+  saveData();
+  renderJournal();
+  updateProgress();
+}
