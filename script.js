@@ -278,3 +278,155 @@ function deleteJournal(index) {
   renderJournal();
   updateProgress();
 }
+
+function saveMood() {
+  const moodValue = Number(document.getElementById("moodSelect").value);
+  appData.moods.push(moodValue);
+  document.getElementById("savedMoodText").textContent = "Mood saved: " + moodValue + "/5";
+  saveData();
+  updateProgress();
+}
+
+function addGrocery() {
+  const input = document.getElementById("groceryInput");
+  const text = input.value.trim();
+
+  if (text !== "") {
+    appData.grocery.push(text);
+    input.value = "";
+    saveData();
+    renderGrocery();
+    updateProgress();
+  }
+}
+
+function renderGrocery() {
+  const list = document.getElementById("groceryList");
+  list.innerHTML = "";
+
+  appData.grocery.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.className = "list-row";
+
+    const span = document.createElement("span");
+    span.textContent = item;
+
+    const btn = document.createElement("button");
+    btn.textContent = "Delete";
+    btn.className = "icon-btn";
+    btn.onclick = function () {
+      appData.grocery.splice(index, 1);
+      saveData();
+      renderGrocery();
+      updateProgress();
+    };
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+function addRoutine() {
+  const taskInput = document.getElementById("routineTask");
+  const timeInput = document.getElementById("routineTime");
+
+  const task = taskInput.value.trim();
+  const time = timeInput.value.trim();
+
+  if (task !== "" && time !== "") {
+    appData.routine.push({ task: task, time: time });
+    taskInput.value = "";
+    timeInput.value = "";
+    saveData();
+    renderRoutine();
+    updateProgress();
+  }
+}
+
+function renderRoutine() {
+  const list = document.getElementById("routineList");
+  list.innerHTML = "";
+
+  appData.routine.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.className = "list-row";
+
+    const span = document.createElement("span");
+    span.textContent = item.task + " - " + item.time;
+
+    const btn = document.createElement("button");
+    btn.textContent = "Delete";
+    btn.className = "icon-btn";
+    btn.onclick = function () {
+      appData.routine.splice(index, 1);
+      saveData();
+      renderRoutine();
+      updateProgress();
+    };
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+function saveCycleData() {
+  const startDate = document.getElementById("cycleStartDate").value;
+  const cycleLength = Number(document.getElementById("cycleLength").value) || 28;
+
+  appData.cycleStartDate = startDate;
+  appData.cycleLength = cycleLength;
+
+  saveData();
+  updateCycleInfo();
+}
+
+function updateCycleInfo() {
+  const dayDisplay = document.getElementById("cycleDayDisplay");
+  const phaseName = document.getElementById("phaseName");
+  const phaseDescription = document.getElementById("phaseDescription");
+  const dashboardPhase = document.getElementById("dashboardPhase");
+  const dashboardPhaseTip = document.getElementById("dashboardPhaseTip");
+  const dashboardCycleDay = document.getElementById("dashboardCycleDay");
+
+  if (!appData.cycleStartDate) {
+    dayDisplay.textContent = "Not set";
+    phaseName.textContent = "Not set";
+    phaseDescription.textContent = "Add your last period start date to see your phase.";
+    dashboardPhase.textContent = "Not set";
+    dashboardPhaseTip.textContent = "Add your cycle info for personalized support.";
+    dashboardCycleDay.textContent = "Not set";
+    return;
+  }
+
+  const start = new Date(appData.cycleStartDate);
+  const today = new Date();
+  const diffTime = today.getTime() - start.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const cycleDay = ((diffDays % appData.cycleLength) + appData.cycleLength) % appData.cycleLength + 1;
+
+  let phase = "";
+  let description = "";
+
+  if (cycleDay >= 1 && cycleDay <= 5) {
+    phase = "Menstrual";
+    description = "Rest, hydrate, choose warm foods, and do gentle movement.";
+  } else if (cycleDay >= 6 && cycleDay <= 13) {
+    phase = "Follicular";
+    description = "Energy may rise. Great time for fresh habits, planning, and workouts.";
+  } else if (cycleDay >= 14 && cycleDay <= 17) {
+    phase = "Ovulation";
+    description = "You may feel more energetic and social. Good time for higher-energy movement.";
+  } else {
+    phase = "Luteal";
+    description = "Slow down a little, support cravings with nourishing meals, and prioritize calm.";
+  }
+
+  dayDisplay.textContent = cycleDay;
+  phaseName.textContent = phase;
+  phaseDescription.textContent = description;
+  dashboardPhase.textContent = phase;
+  dashboardPhaseTip.textContent = description;
+  dashboardCycleDay.textContent = cycleDay;
+}
