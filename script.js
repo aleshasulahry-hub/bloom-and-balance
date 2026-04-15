@@ -164,3 +164,32 @@ function addSelfCare() {
     updateProgress();
   }
 }
+
+function createListItem(item, index, type) {
+  const li = document.createElement("li");
+  li.className = "list-row";
+
+  const textSpan = document.createElement("span");
+  textSpan.textContent = item.text;
+  if (item.done) textSpan.classList.add("done");
+
+  const actions = document.createElement("div");
+  actions.className = "small-actions";
+
+  const doneBtn = document.createElement("button");
+  doneBtn.textContent = item.done ? "Undo" : "Done";
+  doneBtn.className = "icon-btn";
+  doneBtn.onclick = function () {
+    appData[type][index].done = !appData[type][index].done;
+    saveData();
+    renderAll();
+  };
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.className = "icon-btn";
+  deleteBtn.onclick = function () {
+    appData[type].splice(index, 1);
+    saveData();
+    renderAll();
+  };
