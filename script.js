@@ -7,6 +7,7 @@ const quotes = [
   "Softness and consistency can exist together.",
   "Progress matters more than perfection."
 ];
+
 const reminders = [
   "Take care of yourself with kindness today.",
   "Drink water before your next task.",
@@ -36,7 +37,9 @@ let appData = {
     { task: "Homework check-in", time: "6:30 PM" }
   ],
   cycleStartDate: "",
-  cycleLength: 28
+  cycleLength: 28,
+  streak: 0,
+  lastCompletionDate: ""
 };
 
 function saveData() {
@@ -45,15 +48,59 @@ function saveData() {
 
 function loadData() {
   const saved = localStorage.getItem("bloomBalanceData");
+
   if (saved) {
     appData = JSON.parse(saved);
+  }
+
+  if (!appData.streak) appData.streak = 0;
+  if (!appData.lastCompletionDate) appData.lastCompletionDate = "";
+  if (!appData.moods) appData.moods = [];
+
+  appData.moods = appData.moods.map(item => {
+    if (typeof item === "number") {
+      return {
+        value: item,
+        date: new Date().toLocaleDateString()
+      };
+    }
+
+    return item;
+  });
+}
+
+function todayString() {
+  return new Date().toLocaleDateString();
+}
+
+function updateStreak() {
+  const today = todayString();
+
+  if (appData.lastCompletionDate !== today) {
+    appData.streak++;
+    appData.lastCompletionDate = today;
+    saveData();
   }
 }
 
 function showSection(sectionId) {
   const pages = document.querySelectorAll(".page");
   pages.forEach(page => page.classList.remove("active"));
-  document.getElementById(sectionId).classList.add("active");
+
+  const selectedPage = document.getElementById(sectionId);
+  if (selectedPage) {
+    selectedPage.classList.add("active");
+  }
+
+  const navButtons = document.querySelectorAll(".nav-btn");
+  navButtons.forEach(button => button.classList.remove("active-tab"));
+
+  const activeButton = document.querySelector(`.nav-btn[data-section="${sectionId}"]`);
+  if (activeButton) {
+    activeButton.classList.add("active-tab");
+  }
+
+  updateProgress();
 }
 
 function newQuote() {
@@ -64,6 +111,7 @@ function newQuote() {
 function newReminder() {
   const randomIndex = Math.floor(Math.random() * reminders.length);
   const text = reminders[randomIndex];
+
   document.getElementById("reminderText").textContent = text;
   document.getElementById("todayReminder").textContent = text;
 }
@@ -85,6 +133,7 @@ function resetWater() {
 function updateWaterUI() {
   document.getElementById("waterCount").textContent = appData.water;
   document.getElementById("waterProgressText").textContent = appData.water;
+
   const percent = (appData.water / 8) * 100;
   document.getElementById("waterBar").style.width = percent + "%";
   document.getElementById("waterProgressBar").style.width = percent + "%";
@@ -103,27 +152,47 @@ function startBreathing() {
   let index = 0;
 
   clearInterval(breathingInterval);
-  document.getElementById("breathingText").textContent = steps[index];
-  document.getElementById("breathingText2").textContent = steps[index];
+
+  if (document.getElementById("breathingText")) {
+    document.getElementById("breathingText").textContent = steps[index];
+  }
+
+  if (document.getElementById("breathingText2")) {
+    document.getElementById("breathingText2").textContent = steps[index];
+  }
 
   if (circle1) circle1.classList.add("animate");
   if (circle2) circle2.classList.add("animate");
 
   breathingInterval = setInterval(() => {
     index = (index + 1) % steps.length;
-    document.getElementById("breathingText").textContent = steps[index];
-    document.getElementById("breathingText2").textContent = steps[index];
+
+    if (document.getElementById("breathingText")) {
+      document.getElementById("breathingText").textContent = steps[index];
+    }
+
+    if (document.getElementById("breathingText2")) {
+      document.getElementById("breathingText2").textContent = steps[index];
+    }
   }, 4000);
 }
 
 function stopBreathing() {
   clearInterval(breathingInterval);
+
   const circle1 = document.getElementById("breathingCircle");
   const circle2 = document.getElementById("breathingCircle2");
+
   if (circle1) circle1.classList.remove("animate");
   if (circle2) circle2.classList.remove("animate");
-  document.getElementById("breathingText").textContent = "Breathing stopped.";
-  document.getElementById("breathingText2").textContent = "Breathing stopped.";
+
+  if (document.getElementById("breathingText")) {
+    document.getElementById("breathingText").textContent = "Breathing stopped.";
+  }
+
+  if (document.getElementById("breathingText2")) {
+    document.getElementById("breathingText2").textContent = "Breathing stopped.";
+  }
 }
 
 function addGoal() {
@@ -134,8 +203,7 @@ function addGoal() {
     appData.goals.push({ text: text, done: false });
     input.value = "";
     saveData();
-    renderGoals();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -147,8 +215,7 @@ function addHabit() {
     appData.habits.push({ text: text, done: false });
     input.value = "";
     saveData();
-    renderHabits();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -160,8 +227,7 @@ function addSelfCare() {
     appData.selfCare.push({ text: text, done: false });
     input.value = "";
     saveData();
-    renderSelfCare();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -171,7 +237,10 @@ function createListItem(item, index, type) {
 
   const textSpan = document.createElement("span");
   textSpan.textContent = item.text;
-  if (item.done) textSpan.classList.add("done");
+
+  if (item.done) {
+    textSpan.classList.add("done");
+  }
 
   const actions = document.createElement("div");
   actions.className = "small-actions";
@@ -179,8 +248,14 @@ function createListItem(item, index, type) {
   const doneBtn = document.createElement("button");
   doneBtn.textContent = item.done ? "Undo" : "Done";
   doneBtn.className = "icon-btn";
+
   doneBtn.onclick = function () {
     appData[type][index].done = !appData[type][index].done;
+
+    if (appData[type][index].done) {
+      updateStreak();
+    }
+
     saveData();
     renderAll();
   };
@@ -188,6 +263,7 @@ function createListItem(item, index, type) {
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Delete";
   deleteBtn.className = "icon-btn";
+
   deleteBtn.onclick = function () {
     appData[type].splice(index, 1);
     saveData();
@@ -205,6 +281,7 @@ function createListItem(item, index, type) {
 function renderGoals() {
   const list = document.getElementById("goalList");
   list.innerHTML = "";
+
   appData.goals.forEach((goal, index) => {
     list.appendChild(createListItem(goal, index, "goals"));
   });
@@ -213,6 +290,7 @@ function renderGoals() {
 function renderHabits() {
   const list = document.getElementById("habitList");
   list.innerHTML = "";
+
   appData.habits.forEach((habit, index) => {
     list.appendChild(createListItem(habit, index, "habits"));
   });
@@ -221,6 +299,7 @@ function renderHabits() {
 function renderSelfCare() {
   const list = document.getElementById("selfCareList");
   list.innerHTML = "";
+
   appData.selfCare.forEach((item, index) => {
     list.appendChild(createListItem(item, index, "selfCare"));
   });
@@ -243,8 +322,7 @@ function saveJournal() {
     titleInput.value = "";
     entryInput.value = "";
     saveData();
-    renderJournal();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -275,16 +353,29 @@ function renderJournal() {
 function deleteJournal(index) {
   appData.journals.splice(index, 1);
   saveData();
-  renderJournal();
-  updateProgress();
+  renderAll();
 }
 
 function saveMood() {
   const moodValue = Number(document.getElementById("moodSelect").value);
-  appData.moods.push(moodValue);
-  document.getElementById("savedMoodText").textContent = "Mood saved: " + moodValue + "/5";
+
+  appData.moods.push({
+    value: moodValue,
+    date: new Date().toLocaleString()
+  });
+
+  document.getElementById("savedMoodText").textContent =
+    "Mood saved: " + moodValue + "/5. Your mood summary has been updated.";
+
   saveData();
   updateProgress();
+}
+
+function getMoodValues() {
+  return appData.moods.map(item => {
+    if (typeof item === "number") return item;
+    return Number(item.value);
+  });
 }
 
 function addGrocery() {
@@ -295,8 +386,7 @@ function addGrocery() {
     appData.grocery.push(text);
     input.value = "";
     saveData();
-    renderGrocery();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -314,11 +404,11 @@ function renderGrocery() {
     const btn = document.createElement("button");
     btn.textContent = "Delete";
     btn.className = "icon-btn";
+
     btn.onclick = function () {
       appData.grocery.splice(index, 1);
       saveData();
-      renderGrocery();
-      updateProgress();
+      renderAll();
     };
 
     li.appendChild(span);
@@ -339,8 +429,7 @@ function addRoutine() {
     taskInput.value = "";
     timeInput.value = "";
     saveData();
-    renderRoutine();
-    updateProgress();
+    renderAll();
   }
 }
 
@@ -358,11 +447,11 @@ function renderRoutine() {
     const btn = document.createElement("button");
     btn.textContent = "Delete";
     btn.className = "icon-btn";
+
     btn.onclick = function () {
       appData.routine.splice(index, 1);
       saveData();
-      renderRoutine();
-      updateProgress();
+      renderAll();
     };
 
     li.appendChild(span);
@@ -431,6 +520,35 @@ function updateCycleInfo() {
   dashboardCycleDay.textContent = cycleDay;
 }
 
+function renderMoodLists() {
+  const recentMoodList = document.getElementById("recentMoodList");
+  const progressMoodList = document.getElementById("progressMoodList");
+
+  if (recentMoodList) recentMoodList.innerHTML = "";
+  if (progressMoodList) progressMoodList.innerHTML = "";
+
+  if (appData.moods.length === 0) {
+    if (recentMoodList) recentMoodList.innerHTML = "<p>No mood entries yet.</p>";
+    if (progressMoodList) progressMoodList.innerHTML = "<p>No mood entries yet.</p>";
+    return;
+  }
+
+  appData.moods.slice(-5).reverse().forEach(item => {
+    const moodValue = typeof item === "number" ? item : item.value;
+    const moodDate = typeof item === "number" ? "Previous entry" : item.date;
+
+    const div = document.createElement("div");
+    div.className = "mood-item";
+    div.innerHTML = `
+      <strong>${moodDate}</strong>
+      <p>Mood: ${moodValue}/5</p>
+    `;
+
+    if (recentMoodList) recentMoodList.appendChild(div.cloneNode(true));
+    if (progressMoodList) progressMoodList.appendChild(div);
+  });
+}
+
 function updateProgress() {
   const goalCount = appData.goals.length;
   const habitCount = appData.habits.length;
@@ -441,9 +559,14 @@ function updateProgress() {
 
   const goalDone = appData.goals.filter(item => item.done).length;
   const habitDone = appData.habits.filter(item => item.done).length;
-  const moodAverage = appData.moods.length
-    ? (appData.moods.reduce((a, b) => a + b, 0) / appData.moods.length).toFixed(1)
+
+  const moodValues = getMoodValues();
+  const moodAverage = moodValues.length
+    ? (moodValues.reduce((a, b) => a + b, 0) / moodValues.length).toFixed(1)
     : 0;
+
+  const highestMood = moodValues.length ? Math.max(...moodValues) : 0;
+  const recentMood = moodValues.length ? moodValues[moodValues.length - 1] + "/5" : "No mood saved yet";
 
   document.getElementById("goalCount").textContent = goalCount;
   document.getElementById("habitCount").textContent = habitCount;
@@ -451,7 +574,17 @@ function updateProgress() {
   document.getElementById("groceryCount").textContent = groceryCount;
   document.getElementById("routineCount").textContent = routineCount;
   document.getElementById("selfCareCount").textContent = selfCareCount;
+
   document.getElementById("moodAverage").textContent = moodAverage;
+  document.getElementById("dashboardMoodAverage").textContent = moodAverage;
+  document.getElementById("journalMoodAverage").textContent = moodAverage;
+  document.getElementById("highestMood").textContent = highestMood;
+  document.getElementById("recentMood").textContent = recentMood;
+  document.getElementById("dashboardMoodEntries").textContent = moodValues.length;
+  document.getElementById("moodEntryCount").textContent = moodValues.length;
+
+  document.getElementById("dashboardStreak").textContent = appData.streak;
+  document.getElementById("progressStreak").textContent = appData.streak;
 
   const goalPercent = goalCount ? (goalDone / goalCount) * 100 : 0;
   const habitPercent = habitCount ? (habitDone / habitCount) * 100 : 0;
@@ -461,6 +594,32 @@ function updateProgress() {
   document.getElementById("habitChartBar").style.width = habitPercent + "%";
   document.getElementById("moodChartBar").style.width = moodPercent + "%";
 
+  let moodMessage = "Log your mood to start seeing patterns.";
+  let trendMessage = "No mood trend yet.";
+
+  if (moodValues.length >= 2) {
+    const previous = moodValues[moodValues.length - 2];
+    const current = moodValues[moodValues.length - 1];
+
+    if (current > previous) {
+      moodMessage = "Your most recent mood is higher than your last entry.";
+      trendMessage = "Mood trend: improving compared to your last entry.";
+    } else if (current < previous) {
+      moodMessage = "Your most recent mood is lower than your last entry. A gentle reset may help.";
+      trendMessage = "Mood trend: lower than your last entry.";
+    } else {
+      moodMessage = "Your most recent mood stayed the same as your last entry.";
+      trendMessage = "Mood trend: steady.";
+    }
+  } else if (moodValues.length === 1) {
+    moodMessage = "You have started tracking your mood. Add more entries to see a trend.";
+    trendMessage = "One mood entry saved so far.";
+  }
+
+  document.getElementById("dashboardMoodMessage").textContent = moodMessage;
+  document.getElementById("moodTrendText").textContent = trendMessage;
+
+  renderMoodLists();
   updateWaterUI();
 }
 
@@ -527,6 +686,7 @@ function renderAll() {
 window.onload = function () {
   loadData();
   renderAll();
+  showSection("dashboard");
   newReminder();
   newQuote();
 };
