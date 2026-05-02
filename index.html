@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="floating-decor">
     <span class="butterfly b1">🦋</span>
@@ -19,6 +20,7 @@
     <span class="flower f3">🌼</span>
     <span class="flower f4">🌸</span>
   </div>
+
   <header class="hero">
     <div class="hero-text">
       <p class="tag">Women’s Wellness • Self Growth • Daily Balance</p>
@@ -32,6 +34,7 @@
         <button class="secondary-btn" onclick="showSection('account')">Login</button>
       </div>
     </div>
+
     <div class="hero-card">
       <h3>Today’s Wellness Reminder</h3>
       <p id="todayReminder">You do not need to earn rest.</p>
@@ -39,16 +42,16 @@
     </div>
   </header>
 
- <nav class="top-nav">
-    <button onclick="showSection('dashboard')">Dashboard</button>
-    <button onclick="showSection('goals')">Goals & Habits</button>
-    <button onclick="showSection('journal')">Journal & Mood</button>
-    <button onclick="showSection('cycle')">Cycle Care</button>
-    <button onclick="showSection('wellness')">Wellness Tools</button>
-    <button onclick="showSection('meals')">Meals & Groceries</button>
-    <button onclick="showSection('mothers')">For Mothers</button>
-    <button onclick="showSection('progress')">Progress</button>
-    <button onclick="showSection('account')">Account</button>
+  <nav class="top-nav">
+    <button class="nav-btn active-tab" data-section="dashboard" onclick="showSection('dashboard')">Dashboard</button>
+    <button class="nav-btn" data-section="goals" onclick="showSection('goals')">Goals & Habits</button>
+    <button class="nav-btn" data-section="journal" onclick="showSection('journal')">Journal & Mood</button>
+    <button class="nav-btn" data-section="cycle" onclick="showSection('cycle')">Cycle Care</button>
+    <button class="nav-btn" data-section="wellness" onclick="showSection('wellness')">Wellness Tools</button>
+    <button class="nav-btn" data-section="meals" onclick="showSection('meals')">Meals & Groceries</button>
+    <button class="nav-btn" data-section="mothers" onclick="showSection('mothers')">For Mothers</button>
+    <button class="nav-btn" data-section="progress" onclick="showSection('progress')">Progress</button>
+    <button class="nav-btn" data-section="account" onclick="showSection('account')">Account</button>
   </nav>
 
   <div class="theme-bar">
@@ -60,8 +63,8 @@
     </select>
   </div>
 
-  </main>
-  <section id="dashboard" class="page active">
+  <main>
+    <section id="dashboard" class="page active">
       <div class="grid three">
         <div class="card">
           <h2>🦋 Quote Generator</h2>
@@ -81,11 +84,33 @@
           </div>
         </div>
 
-
         <div class="card">
           <h2>💕 Positive Reminder</h2>
           <p id="reminderText">Take care of yourself with kindness today.</p>
           <button onclick="newReminder()">New Reminder</button>
+        </div>
+      </div>
+
+      <div class="grid three">
+        <div class="card summary-card">
+          <h2>🔥 Current Streak</h2>
+          <p class="big-number"><span id="dashboardStreak">0</span> day(s)</p>
+          <p class="soft-note">Your streak grows when you complete goals or habits on different days.</p>
+        </div>
+
+        <div class="card summary-card">
+          <h2>😊 Mood Summary</h2>
+          <p><strong>Average mood:</strong> <span id="dashboardMoodAverage">0</span>/5</p>
+          <p><strong>Total mood entries:</strong> <span id="dashboardMoodEntries">0</span></p>
+          <p id="dashboardMoodMessage">Log your mood to start seeing patterns.</p>
+        </div>
+
+        <div class="card summary-card">
+          <h2>📈 This Iteration</h2>
+          <p>
+            This version focuses on making existing tools more meaningful by showing
+            streaks, summaries, consistency, and mood patterns.
+          </p>
         </div>
       </div>
 
@@ -109,10 +134,11 @@
       </div>
     </section>
 
-     <section id="goals" class="page">
+    <section id="goals" class="page">
       <div class="grid two">
         <div class="card">
           <h2>Daily Goals</h2>
+          <p class="soft-note">Completing goals now helps build your streak and progress summary.</p>
           <div class="input-row">
             <input type="text" id="goalInput" placeholder="Enter a daily goal" />
             <button onclick="addGoal()">Add Goal</button>
@@ -122,6 +148,7 @@
 
         <div class="card">
           <h2>Habit Tracker</h2>
+          <p class="soft-note">Habits now connect to your consistency progress.</p>
           <div class="input-row">
             <input type="text" id="habitInput" placeholder="Enter a habit" />
             <button onclick="addHabit()">Add Habit</button>
@@ -164,6 +191,7 @@
 
         <div class="card">
           <h2>😊 Daily Mood Log</h2>
+          <p class="soft-note">Mood entries now save by date so the app can show trends over time.</p>
           <label for="moodSelect">How are you feeling today?</label>
           <select id="moodSelect">
             <option value="1">1 - Very Low</option>
@@ -177,9 +205,19 @@
         </div>
       </div>
 
-      <div class="card">
-        <h2>Journal Section</h2>
-        <div id="journalList" class="journal-list"></div>
+      <div class="grid two">
+        <div class="card">
+          <h2>Journal Section</h2>
+          <div id="journalList" class="journal-list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Recent Mood Pattern</h2>
+          <p><strong>Average:</strong> <span id="journalMoodAverage">0</span>/5</p>
+          <p><strong>Highest mood:</strong> <span id="highestMood">0</span>/5</p>
+          <p><strong>Most recent mood:</strong> <span id="recentMood">No mood saved yet</span></p>
+          <div id="recentMoodList" class="journal-list"></div>
+        </div>
       </div>
     </section>
 
@@ -385,6 +423,7 @@
         <div class="card">
           <h2>Mood Average</h2>
           <p><strong id="moodAverage">0</strong>/5 average</p>
+          <p id="moodTrendText">No mood trend yet.</p>
           <div class="chart-box">
             <div class="chart-label">Mood</div>
             <div class="chart-bar-shell">
@@ -394,7 +433,13 @@
         </div>
       </div>
 
-      <div class="grid two">
+      <div class="grid three">
+        <div class="card">
+          <h2>🔥 Streak System</h2>
+          <p><strong id="progressStreak">0</strong> day(s)</p>
+          <p class="soft-note">This makes the app feel more like a personal wellness companion.</p>
+        </div>
+
         <div class="card">
           <h2>Water Progress</h2>
           <p><strong id="waterProgressText">0</strong>/8 cups</p>
@@ -410,8 +455,14 @@
             <li>Grocery items: <span id="groceryCount">0</span></li>
             <li>Routine tasks: <span id="routineCount">0</span></li>
             <li>Self-care reminders: <span id="selfCareCount">0</span></li>
+            <li>Mood entries: <span id="moodEntryCount">0</span></li>
           </ul>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>Recent Mood Entries</h2>
+        <div id="progressMoodList" class="journal-list"></div>
       </div>
     </section>
 
@@ -431,10 +482,10 @@
         <div class="card">
           <h2>About This Website</h2>
           <p>
-            Bloom & Balance is a women’s wellness and self-growth web application designed to help users build healthy daily routines in a supportive and encouraging space. 
-
-The purpose of the site is to bring together multiple self-care and wellness tools into one accessible website so users can stay organized, reflect on their emotions, and take better care of their physical and mental well-being. This site was created with the idea that wellness is not only about productivity, but also about balance, rest, reflection, and consistency. Many people use separate apps for habit tracking, journaling, reminders, water intake, meal planning, and mood logging. This site is especially focused on women’s wellness. It includes tools such as a period and cycle tracker, explanations of cycle phases, wellness tips for each phase, cycle-based workout suggestions, and healthy meal ideas. It also includes features that can support mothers and families, such as grocery lists, meal suggestions, and a simple mother-and-kids routine planner. The goal of the website is to encourage users to grow through small daily actions.
-
+            Bloom & Balance is a women’s wellness and self-growth web application designed to help users build healthy daily routines in a supportive and encouraging space.
+          </p>
+          <p>
+            This updated version focuses less on adding random new tools and more on making the current tools meaningful. The app now helps users see patterns through mood summaries, habit completion, progress bars, and a streak system.
           </p>
         </div>
       </div>
